@@ -1,0 +1,139 @@
+---
+name: some_deployment_name
+director_uuid: some_director_uuid
+
+releases:
+- name: cf-release
+  version: latest
+
+networks:
+- name: cf1
+  type: manual
+  subnets:
+  - range: 10.10.16.0/24
+    name: default_unused
+    reserved:
+    - 10.10.16.2 - 10.10.16.9
+    static:
+    - 10.10.16.10 - 10.10.16.255
+    gateway: 10.10.16.1
+    dns:
+    - 10.10.0.2
+
+resource_pools:
+- name: dea
+  size: 28
+  cloud_properties:
+    instance_type: m2.2xlarge
+    availability_zone: us-east-1d
+
+jobs:
+- name: dea_next
+  template: dea_next
+  instances: 28
+  resource_pool: dea
+
+properties:
+  domain: example.com
+  system_domain: system.example.com
+  system_domain_organization: example_org
+  app_domains:
+  - apps.example.com
+  template_only:
+    aws:
+      access_key_id: aws_access_key
+      secret_access_key: aws_secret_access_key
+      availability_zone: us-east-1d
+      subnet_ids:
+        cf1: subnet-0000
+    datadog:
+      datadog_api_key: some_datadog_api_key
+      datadog_application_key: some_datadog_application_key
+    appdirect_gateway:
+      service_auth_tokens:
+        sendgrid_sendgrid: 'sendgrid_token'
+      appdirect:
+        endpoint: 'https://appdirect.example.com'
+        key: some_appdirect_key
+        secret: some_appdirect_secret
+      exception_notification: true
+      airbrake_api_key: some_airbrake_api_key
+
+  ccdb: &70190416023580
+    db_scheme: mysql
+    roles:
+    - tag: admin
+      name: ccdb_user
+      password: ccdb_password
+    databases:
+    - tag: cc
+      name: ccdb
+    address: ccdb.example.com
+    port: 3306
+  uaadb:
+    db_scheme: mysql
+    roles:
+    - tag: admin
+      name: uaadb_user
+      password: uaadb_password
+    databases:
+    - tag: uaa
+      name: uaadb
+    address: uaadb.example.com
+    port: 3306
+  uaa:
+    jwt:
+      signing_key: some_jwt_signing_key
+      verification_key: some_jwt_verification_key
+    cc:
+      client_secret: some_cc_client_secret
+    admin:
+      client_secret: some_admin_client_secret
+    batch:
+      username: uaa_batch_user
+      password: uaa_batch_password
+    clients:
+      login:
+        secret: uaa_client_login_secret
+    scim:
+      users:
+      - admin|admin_password|scim.write,scim.read,openid,cloud_controller.admin
+      - services|services_password|scim.write,scim.read,openid,cloud_controller.admin
+  nats:
+    user: nats_user
+    password: nats_password
+  cc:
+    bulk_api_password: cc_bulk_password
+    staging_upload_user: cc_staging_user
+    staging_upload_password: cc_staging_password
+    db_encryption_key: cc_encryption_key
+    resource_pool:
+      resource_directory_key: cc_resource_pool_key
+      cdn:
+        uri: https://cdn.example.com
+        key_pair_id: cdn_key_pair_id
+        private_key: cdn_private_key
+    packages:
+      app_package_directory_key: cc_package_key
+    droplets:
+      droplet_directory_key: cc_droplet_key
+      cdn:
+        uri: https://droplet-cdn.example.com
+        key_pair_id: droplet_cdn_key_pair_id
+        private_key: droplet_cdn_private_key
+
+  router:
+    status:
+      user: router_status_user
+      password: router_status_password
+  serialization_data_server:
+    upload_token: serialization_token
+  syslog_aggregator:
+    persistent_disk: 524288
+    log_email:
+      from_email: syslog_email
+      from_password: syslog_password
+  ccdb_ng: *70190416023580
+  dea:
+    update:
+      max_in_flight: 1

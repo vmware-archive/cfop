@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+# Usage: cfop ccdb-console
+# Summary: Use credentials from cf-aws-stub.yml and open a mysql session against CCDB.
+# Help: If cf-aws-stub.yml is in a nonstandard location, set the CFOP_AWS_STUB environment variable.
+
+require "#{ENV["_CFOP_ROOT"]}/share/put_cfop_on_load_path"
+require "cfop/ccdb_console"
+require "cfop/common"
+require "yaml"
+require "tempfile"
+
+prod_yaml_file = CfOp::Common.find_prod_yaml_file
+puts "Using config file: #{prod_yaml_file}"
+
+yaml = YAML.load_file(prod_yaml_file)
+password = CfOp::CcdbConsole.ccdb_password(yaml)
+
+Tempfile.open(['my', '.cnf']) do |f|
+  f.write(<<-MYSQL)
+[client]
+password=#{password}
+MYSQL
+  f.flush
+
+  mysql_conf_path = f.path
+  command = CfOp::CcdbConsole.build_command(yaml, mysql_conf_path)
+
+  Process.waitpid(Process.fork do
+    exec(*command)
+  end)
+end

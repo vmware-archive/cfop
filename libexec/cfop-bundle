@@ -1,0 +1,6 @@
+#!/bin/bash
+# Usage: cfop bundle [bundle_command1, bundle_command2, ...]
+# Summary: Runs `bundle $@` while pointing BUNDLE_GEMFILE to that provided by cfop
+# Help: If you want to run `bundle install --without test` with cfop, run `cfop bundle install --without test`.
+
+BUNDLE_GEMFILE="${_CFOP_ROOT}/share/Gemfile" bundle "$@"

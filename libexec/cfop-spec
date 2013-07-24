@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rspec "${_CFOP_ROOT}/share/spec"
