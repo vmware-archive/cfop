@@ -60,6 +60,19 @@ properties:
     password: nats_password
     port: 4222
     user: nats_user
+  ccdb_ng:
+    databases:
+    - tag: cc
+      name: ccdb
+    roles:
+    - tag: admin
+      name: ccdb_user
+      password: ccdb_password
+    db_scheme: mysql
+    address: ccdb.example.com
+    port: 3306
+    max_connections:
+    pool_timeout:
 dns_domain_name: bosh
 template_hashes:
   dea_next: 099bae577261e8d6dffffc65efbb85851592b2b4

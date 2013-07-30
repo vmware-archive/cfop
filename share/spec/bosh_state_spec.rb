@@ -20,4 +20,11 @@ describe CfOp::BoshState do
   its(:job_index) { should eq(5) }
 
   its(:nats_uri) { should eq("nats://nats_user:nats_password@192.0.2.4:4222")}
+
+  it "can build a CCDB command" do
+    command = bosh_state.ccdb_command("/some/path")
+    expect(command).to eq(%w(mysql --defaults-extra-file=/some/path -h ccdb.example.com -P 3306 -D ccdb -u ccdb_user))
+  end
+
+  its(:ccdb_password) { should eq("ccdb_password") }
 end

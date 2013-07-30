@@ -35,6 +35,20 @@ module CfOp
       "nats://#{user}:#{password}@#{host}:#{port}"
     end
 
+    def ccdb_command(conf_path)
+      ccdb = @yaml.fetch('properties').fetch('ccdb_ng')
+
+      host = ccdb.fetch('address')
+      port = ccdb.fetch('port')
+      user = ccdb.fetch('roles').fetch(0).fetch('name')
+      db_name = ccdb.fetch('databases').fetch(0).fetch('name')
+      %W(mysql --defaults-extra-file=#{conf_path} -h #{host} -P #{port} -D #{db_name} -u #{user})
+    end
+
+    def ccdb_password
+      @yaml.fetch('properties').fetch('ccdb_ng').fetch('roles').fetch(0).fetch('password')
+    end
+
     # Consumers should only call #from_file
     private_class_method :new
   end
