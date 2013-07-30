@@ -1,0 +1,65 @@
+---
+deployment: the_deployment_name
+release:
+  name: a_release_name
+  version: the_dev_version
+job:
+  name: job_name
+  release: job_release
+  templates:
+  - name: job_name
+    version: 13.4-dev
+    sha1: 6e9bf85f6f8165f40bd43d69476c087e3bfdbb82
+    blobstore_id: 503c1d32-81ca-453e-9f49-fe5363147734
+  template: job_name
+  version: 13.4-dev
+  sha1: 6e9bf85f6f8165f40bd43d69476c087e3bfcbb82
+  blobstore_id: 503c1d32-81ca-453e-9f49-fe5363147734
+index: 5
+networks:
+  cf1:
+    ip: 10.10.17.16
+    netmask: 255.255.240.0
+    cloud_properties:
+      security_groups:
+      - cf
+      subnet: subnet-7fa1b413
+    default:
+    - dns
+    - gateway
+    dns:
+    - 10.10.0.2
+    - 10.10.0.7
+    gateway: 10.10.16.1
+    dns_record_name: 0.job-name.cf1.deployment-name.bosh
+resource_pool:
+  name: resource_pool_name
+  cloud_properties:
+    instance_type: m1.large
+    availability_zone: us-east-1b
+  stemcell:
+    name: bosh-stemcell
+    version: '810'
+packages:
+  common:
+    name: common
+    version: '5.1'
+    sha1: c0a56791d153a829e39ec72263ba66879ba6ec4e
+    blobstore_id: 42422c8c-4b29-4f5c-b243-832024ddc37e
+  ruby:
+    name: ruby
+    version: 8.1-dev.1
+    sha1: e6caf344d521c8220deaa1532e9c4ce2be607a11
+    blobstore_id: 9b074cf6-6c1a-47a2-bfa1-685e8ac1f157
+persistent_disk: 0
+configuration_hash: a33bdf688f679b9c1ae03326211d5361b47dba34
+properties:
+  domain: foo.example.com
+  nats:
+    address: 192.0.2.4
+    password: nats_password
+    port: 4222
+    user: nats_user
+dns_domain_name: bosh
+template_hashes:
+  dea_next: 099bae577261e8d6dffffc65efbb85851592b2b4

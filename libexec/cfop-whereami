@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# Usage: cfop whereami [path_to_state_yml]
+# Summary: Tells you the job name and index of the current host
+
+require "#{ENV["_CFOP_ROOT"]}/share/put_cfop_on_load_path"
+require "cfop/bosh_state"
+
+abort "Argument mismatch" if ARGV.size > 1
+
+bosh_state_path = ARGV.fetch(0, CfOp::BoshState.default_path)
+bosh_state = CfOp::BoshState.from_file(bosh_state_path)
+
+puts "#{bosh_state.job_name}/#{bosh_state.job_index}"
