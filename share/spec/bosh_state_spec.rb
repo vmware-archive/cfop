@@ -22,6 +22,13 @@ describe CfOp::BoshState do
 
   its(:nats_uri) { should eq("nats://nats_user:nats_password@192.0.2.4:4222")}
 
+  it "can build a UAADB command" do
+    command = bosh_state.uaadb_command("/some/path")
+    expect(command).to eq(%w(mysql --defaults-extra-file=/some/path -h uaadb.example.com -P 3306 -D uaadb -u uaadb_user))
+  end
+
+  its(:uaadb_password) { should eq("uaadb_password") }
+
   describe "ccdb" do
     context "when property key ccdb_ng is present" do
       it "can build a CCDB command" do

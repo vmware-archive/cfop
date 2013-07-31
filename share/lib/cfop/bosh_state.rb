@@ -39,6 +39,21 @@ module CfOp
       "nats://#{user}:#{password}@#{host}:#{port}"
     end
 
+    def uaadb_command(conf_path)
+      uaadb = @yaml.fetch('properties').fetch('uaadb')
+
+      host = uaadb.fetch('address')
+      port = uaadb.fetch('port')
+      user = uaadb.fetch('roles').fetch(0).fetch('name')
+      db_name = uaadb.fetch('databases').fetch(0).fetch('name')
+      %W(mysql --defaults-extra-file=#{conf_path} -h #{host} -P #{port} -D #{db_name} -u #{user})
+    end
+
+    def uaadb_password
+      uaadb = @yaml.fetch('properties').fetch('uaadb')
+      uaadb.fetch('roles').fetch(0).fetch('password')
+    end
+
     def ccdb_command(conf_path)
       ccdb = ccdb_properties
 

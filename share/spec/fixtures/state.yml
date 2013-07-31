@@ -73,6 +73,17 @@ properties:
     port: 3306
     max_connections:
     pool_timeout:
+  uaadb:
+    address: uaadb.example.com
+    databases:
+    - tag: uaa
+      name: uaadb
+    db_scheme: mysql
+    port: 3306
+    roles:
+    - tag: admin
+      name: uaadb_user
+      password: uaadb_password
 dns_domain_name: bosh
 template_hashes:
   dea_next: 099bae577261e8d6dffffc65efbb85851592b2b4

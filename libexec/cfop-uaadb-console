@@ -1,19 +1,18 @@
 #!/usr/bin/env ruby
-# Usage: cfop uaadb-console
-# Summary: Use credentials from cf-aws-stub.yml and open a mysql session against UAADB.
-# Help: If cf-aws-stub.yml is in a nonstandard location, set the CFOP_AWS_STUB environment variable.
+# Usage: cfop uaadb-console [path_to_state_yml]
+# Summary: Use credentials from state.yml and open a mysql session against UAADB.
 
 require "#{ENV["_CFOP_ROOT"]}/share/put_cfop_on_load_path"
-require "cfop/uaadb_console"
-require "cfop/common"
-require "yaml"
+require "cfop/bosh_state"
 require "tempfile"
 
-prod_yaml_file = CfOp::Common.find_prod_yaml_file
-puts "Using config file: #{prod_yaml_file}"
+abort "Argument mismatch" if ARGV.size > 1
 
-yaml = YAML.load_file(prod_yaml_file)
-password = CfOp::UaadbConsole.uaadb_password(yaml)
+bosh_state_path = ARGV.fetch(0, CfOp::BoshState.default_path)
+puts "Using config file: #{bosh_state_path}"
+
+bosh_state = CfOp::BoshState.from_file(bosh_state_path)
+password = bosh_state.uaadb_password
 
 Tempfile.open(['my', '.cnf']) do |f|
   f.write(<<-MYSQL)
@@ -23,7 +22,7 @@ MYSQL
   f.flush
 
   mysql_conf_path = f.path
-  command = CfOp::UaadbConsole.build_command(yaml, mysql_conf_path)
+  command = bosh_state.uaadb_command(mysql_conf_path)
 
   Process.waitpid(Process.fork do
     exec(*command)
