@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # Usage: cfop uaadb-console [path_to_state_yml]
 # Summary: Use credentials from state.yml and open a mysql session against UAADB.
+# Help: Not every copy of state.yml has these credentials.
+# If you can't use this file, you might be on a machine that is not intended
+# to connect to UAADB.
 
 require "#{ENV["_CFOP_ROOT"]}/share/put_cfop_on_load_path"
 require "cfop/bosh_state"
