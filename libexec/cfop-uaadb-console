@@ -6,7 +6,7 @@ require "#{ENV["_CFOP_ROOT"]}/share/put_cfop_on_load_path"
 require "cfop/bosh_state"
 require "tempfile"
 
-abort "Argument mismatch" if ARGV.size > 1
+abort "Incorrect number of arguments" if ARGV.size > 1
 
 bosh_state_path = ARGV.fetch(0, CfOp::BoshState.default_path)
 puts "Using config file: #{bosh_state_path}"
