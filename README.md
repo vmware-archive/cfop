@@ -36,6 +36,13 @@ The Heisennats Uncertainty Principle states you can remember the NATS username, 
 With `cfop nats-uri`, you don't have to remember any of them.
 It builds the NATS URI for you (e.g. `nats://username:password@address:port`).
 
+### ccdb-console, uaadb-console
+
+The credentials are all right there in state.yml, if you're on a Cloud Controller or UAA box.
+These commands peek inside that file and serve you up a warm plate of MySQL console with a side dish of connected directly to that database.
+Face it, every once in a while you get hungry for a direct connection to the database.
+Feed that hunger with the `ccdb-console` or `uaadb-console` commands.
+
 ## Will it work in my shell?
 
 Run `cfop spec` to run all the tests!
