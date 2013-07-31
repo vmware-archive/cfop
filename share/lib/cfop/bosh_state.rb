@@ -9,8 +9,12 @@ module CfOp
 
       def from_file(path)
         File.open(path) do |f|
-          new(YAML.load_file(f))
+          from_hash(YAML.load_file(f))
         end
+      end
+
+      def from_hash(hash)
+        new(hash)
       end
     end
 
@@ -36,7 +40,7 @@ module CfOp
     end
 
     def ccdb_command(conf_path)
-      ccdb = @yaml.fetch('properties').fetch('ccdb_ng')
+      ccdb = ccdb_properties
 
       host = ccdb.fetch('address')
       port = ccdb.fetch('port')
@@ -46,10 +50,16 @@ module CfOp
     end
 
     def ccdb_password
-      @yaml.fetch('properties').fetch('ccdb_ng').fetch('roles').fetch(0).fetch('password')
+      ccdb_properties.fetch('roles').fetch(0).fetch('password')
     end
 
     # Consumers should only call #from_file
     private_class_method :new
+
+    private
+    def ccdb_properties
+      properties = @yaml.fetch("properties")
+      properties.fetch("ccdb_ng") { properties.fetch("ccdb") }
+    end
   end
 end
