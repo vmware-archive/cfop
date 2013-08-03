@@ -2,6 +2,8 @@
 
 **C**loud **F**oundry **OP**erator tools
 
+[![Build Status](https://travis-ci.org/cloudfoundry/cfop.png?branch=master)](https://travis-ci.org/cloudfoundry/cfop)
+
 ## Getting cfop onto a BOSH job
 
 We have a team* of unpaid interns working around the clock to add support to cf-release to automatically have cfop available on all your jobs.
