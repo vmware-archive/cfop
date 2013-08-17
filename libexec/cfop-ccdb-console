@@ -27,6 +27,7 @@ MYSQL
   mysql_conf_path = f.path
   command = bosh_state.ccdb_command(mysql_conf_path)
   mysqld_path = "/var/vcap/packages/mysqlclient"
+  env = {"PATH" => "$PATH:#{mysqld_path}/bin", "LD_LIBRARY_PATH" => "$LD_LIBRARY_PATH:#{mysqld_path}/lib/mysql"}
 
-  Process.waitpid(Process.spawn(PATH: "$PATH:#{mysqld_path}/bin", LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:#{mysqld_path}/lib/mysql",command))
+  Process.waitpid(Process.spawn(env, command))
 end
